@@ -74,15 +74,14 @@ const fetchRandomRecipes = async () => {
     }
   }
 };
+const scrollTotop = () => {
+  window.scrollTo(0, 0);
+};
 
 //random recipes
 window.onload = async () => {
   scrollTotop();
   await fetchRandomRecipes();
-};
-
-const scrollTotop = () => {
-  window.scrollTo(0, 0);
 };
 
 function hideSections() {
