@@ -2,7 +2,19 @@ import "./index.scss";
 const axios = require("axios");
 
 //key
-let spoonacularKey = "apiKey=fb17311e451246b9b70d522b4f8b9f24";
+
+let keys = [
+  // keys are stored here for demontration purpose only
+  `${process.env.keyOne}`,
+  `${process.env.keyTwo}`,
+  `${process.env.keyThree}`,
+];
+
+// create a function to change key
+
+const generateKey = () => {
+  return Math.floor(Math.random() * 3);
+};
 
 // domObject
 const domElement = {
@@ -39,13 +51,14 @@ const fetchData = async (url, endpoint) => {
 };
 
 const fetchRandomRecipes = async () => {
+  let key = generateKey();
   const handleResponse = await fetchData(
     "https://api.spoonacular.com/recipes/random?number=20&",
-    spoonacularKey
+    keys[key]
   );
 
   if (handleResponse.error) {
-    alert(handleResponse.error);
+    alert(handleResponse.error.message);
   } else {
     for (let i = 0; i < handleResponse.data.recipes.length; i++) {
       let imageSrc =
@@ -94,10 +107,11 @@ let recipesArray = [];
 
 async function searchRecipe(inputValue) {
   let message = "";
+  let key = generateKey();
   try {
     const getRecipesData = await fetchData(
       `https://api.spoonacular.com/recipes/complexSearch?query=${inputValue}&number=100&`,
-      spoonacularKey
+      keys[key]
     );
     if (getRecipesData.status === 404) {
       message = "404";
@@ -218,9 +232,10 @@ domElement.searchForm.addEventListener("submit", async (e) => {
 // generate new food joke
 domElement.generateJoke.addEventListener("click", async (e) => {
   e.preventDefault();
+  let key = generateKey();
   const jokeResponse = await fetchData(
     "https://api.spoonacular.com/food/jokes/random?&",
-    spoonacularKey
+    keys[key]
   );
   if (jokeResponse.error) {
     alert(jokeResponse.error);
@@ -229,8 +244,8 @@ domElement.generateJoke.addEventListener("click", async (e) => {
   }
 });
 
-if (domElement.articleButtons) {
-  domElement.articleButtons.forEach((element) => {
+if (domElement.guideSection.style.display !== "none") {
+  Array.from(domElement.articleButtons).forEach((element) => {
     element.addEventListener("click", () => {
       domElement.emergencyArticle.style.display = "none";
       domElement.firstArticle.style.display = "none";
@@ -275,7 +290,7 @@ domElement.recipeLastPage.addEventListener("click", () => {
 });
 
 // nav links
-domElement.navLinks.forEach((link) => {
+Array.from(domElement.navLinks).forEach((link) => {
   link.addEventListener("click", async (e) => {
     recipesArray = [];
     e.preventDefault();
@@ -320,9 +335,10 @@ async function displaysingleRecipe(id) {
   let fetchRecipeDetails;
 
   try {
+    let key = generateKey();
     fetchRecipeDetails = await fetchData(
       `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&`,
-      spoonacularKey
+      keys[key]
     );
   } catch (error) {
     showSections();
