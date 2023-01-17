@@ -1,0 +1,110 @@
+@import "./generalConfig.scss";
+///// search result
+
+.search__result__section {
+  width: 100%;
+  min-height: 100vh;
+  margin-bottom: 8rem;
+  display: none;
+
+  h1 {
+    color: $touch_up;
+    width: 90%;
+    margin: 3rem auto;
+    padding: 1rem;
+    font-size: 2rem;
+    @media only screen and(max-width:420px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .search__result__button {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    button {
+      background-color: $primary_color;
+      border: none;
+      cursor: pointer;
+      padding: 0.4rem;
+      width: 18%;
+
+      @media only screen and(max-width:520px) {
+        width: 30%;
+        padding: 0.6rem;
+      }
+    }
+  }
+
+  .container {
+    width: 90%;
+    min-height: 80vh;
+    margin: 0 auto;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 4rem;
+    row-gap: 5rem;
+
+    @media only screen and(max-width:920px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    @media only screen and(max-width:720px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media only screen and(max-width:420px) {
+      column-gap: 2rem;
+      row-gap: 2rem;
+    }
+
+    .search__result-recipe {
+      min-height: 30vh;
+      display: grid;
+      grid-template-rows: 1fr 2fr;
+      row-gap: 0.5rem;
+      cursor: pointer;
+      @media only screen and(max-width:520px) {
+        min-height: 10vh;
+        grid-template-rows: 1fr 1fr;
+      }
+      span {
+        display: block;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+
+        @media only screen and(max-width:520px) {
+          text-align: center;
+        }
+      }
+
+      img {
+        width: 100%;
+        max-height: 100%;
+
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .search__result-pages {
+    width: 50vw;
+    margin: 2rem auto 5rem auto;
+    text-align: center;
+
+    @media only screen and(max-width:520px) {
+      width: 90%;
+    }
+
+    span {
+      background-color: $primary_color;
+      padding: 1rem;
+      border: 1px solid $primary_color;
+      cursor: pointer;
+      @media only screen and(max-width:520px) {
+        padding: 0.5rem;
+      }
+    }
+  }
+}
