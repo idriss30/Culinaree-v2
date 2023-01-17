@@ -1,0 +1,69 @@
+@import "./generalConfig.scss";
+/////// article
+
+.emergency__article,
+.avocado__guide {
+  width: 100%;
+  min-height: 80vh;
+
+  .article__button {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    button {
+      padding: 0.4rem;
+      background-color: $primary_color;
+      border: none;
+      cursor: pointer;
+      width: 18%;
+
+      @media only screen and(max-width:520px) {
+        width: 30%;
+        padding: 0.6rem;
+      }
+    }
+  }
+
+  .article__container {
+    width: 90%;
+
+    margin: 5rem auto;
+    padding: 1rem;
+
+    span {
+      display: inline-block;
+      font-size: 2.5rem;
+      margin: 3rem 0;
+    }
+
+    p {
+      margin: 1rem 0;
+      line-height: 2rem;
+    }
+
+    .article__image {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    img {
+      width: 500px;
+      height: 500px;
+      display: inline-block;
+
+      @media only screen and(max-width:580px) {
+        width: 320px;
+        height: 320px;
+      }
+
+      @media only screen and(max-width:420px) {
+        width: 220px;
+        height: 220px;
+      }
+    }
+
+    li {
+      margin: 1.5rem 0 1.5rem 1rem;
+    }
+  }
+}
