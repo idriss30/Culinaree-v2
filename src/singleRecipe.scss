@@ -1,0 +1,106 @@
+@import "./generalConfig.scss";
+
+// single recipe selected
+.selected__recipe {
+  width: 100%;
+  min-height: 90vh;
+
+  &__container {
+    width: 90%;
+    min-height: 100vh;
+    margin: 4rem auto;
+    padding: 1rem;
+
+    h3,
+    h4,
+    h5 {
+      margin: 2rem 0;
+    }
+    h4,
+    h5 {
+      font-size: 1.2rem;
+    }
+
+    .article__button {
+      width: 90%;
+      margin: 2rem auto;
+      text-align: center;
+      button {
+        padding: 0.4rem;
+        background-color: $primary_color;
+        border: none;
+        cursor: pointer;
+        width: 18%;
+
+        @media only screen and(max-width:520px) {
+          width: 30%;
+          padding: 0.6rem;
+        }
+      }
+    }
+  }
+
+  &__presentation {
+    &-title {
+      h1 {
+        margin: 0 0 2rem 0;
+      }
+
+      img {
+        display: block;
+        margin: 0 auto 2rem auto;
+        @media only screen and(max-width:580px) {
+          width: 320px;
+          height: 280px;
+        }
+
+        @media only screen and(max-width:420px) {
+          width: 220px;
+          height: 220px;
+        }
+      }
+    }
+
+    &-summary {
+      h2 {
+        margin: 2rem 0 1rem 0;
+      }
+      p: {
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  &__ingredients {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    row-gap: 2rem;
+    @media only screen and(max-width:820px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    @media only screen and(max-width:520px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ingredients__title {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      min-height: 10vh;
+
+      img {
+        border: 2px solid $secondary_color;
+        border-radius: 50%;
+        width: 62px;
+        height: 62px;
+      }
+    }
+  }
+  &__instructions {
+    ol {
+      list-style-position: inside;
+      li {
+        padding: 1rem;
+      }
+    }
+  }
+}
