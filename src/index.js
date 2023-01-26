@@ -47,7 +47,7 @@ function displayRandomRecipe(recipeArr) {
   }
 }
 
-async function fetchRandomRecipes() {
+export async function fetchRandomRecipes() {
   let key = generateKey();
   const handleResponse = await fetchData(
     "https://api.spoonacular.com/recipes/random?number=20&",
@@ -85,7 +85,7 @@ domElement.generateJoke.addEventListener("click", async (e) => {
 
 // get recipeID
 
-function getId(e) {
+export function getId(e) {
   e.preventDefault();
   if (e.target.parentElement.tagName.toLowerCase() !== "div") {
     return;
