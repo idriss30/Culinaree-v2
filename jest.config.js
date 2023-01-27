@@ -14,10 +14,10 @@ module.exports = {
   // cacheDirectory: "C:\\Users\\eovan\\AppData\\Local\\Temp\\jest",
 
   // Automatically clear mock calls, instances, contexts and results before every test
-  clearMocks: true,
+  clearMocks: false,
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
@@ -193,4 +193,9 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
   setupFilesAfterEnv: ["<rootDir>/setupJestDom.js"],
+  moduleNameMapper: {
+    "\\.css$": "identity-obj-proxy",
+    "\\.scss": "identity-obj-proxy",
+  },
+  setupFiles: ["dotenv/config"], // allow use of environment variables in your test
 };
