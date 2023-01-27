@@ -49,16 +49,15 @@ function displayRandomRecipe(recipeArr) {
 
 export async function fetchRandomRecipes() {
   let key = generateKey();
-  const handleResponse = await fetchData(
-    "https://api.spoonacular.com/recipes/random?number=20&",
-    key
-  );
-
-  if (handleResponse.error) {
-    alert(handleResponse.error.message);
-  } else {
+  try {
+    const handleResponse = await fetchData(
+      "https://api.spoonacular.com/recipes/random?number=20&",
+      key
+    );
     let recipeArr = handleResponse.data.recipes;
     displayRandomRecipe(recipeArr);
+  } catch (error) {
+    alert(error.message);
   }
 }
 
