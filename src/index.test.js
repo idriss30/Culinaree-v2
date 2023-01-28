@@ -1,16 +1,32 @@
-import { screen, waitFor } from "@testing-library/dom";
+/* writing integration tests for index.js   */
+import { fireEvent, screen, waitFor } from "@testing-library/dom";
 import fs from "fs";
 import nock from "nock";
 
 const renderHtml = fs.readFileSync("./src/index.html", "utf-8");
 
 const alertSpy = jest.spyOn(global, "alert").mockImplementation();
+const basePath = "https://api.spoonacular.com";
+const location = window.location;
+
+//mocking window.location
 
 beforeAll(() => {
   window.scrollTo = jest.fn();
+  console.log(window.location);
 });
 
+afterAll(() => {
+  jest.resetAllMocks();
+});
+
+beforeEach(async () => {
+  window.document.body.innerHTML = renderHtml;
+  require("./index");
+  window.dispatchEvent(new Event("load")); // dispatch event to make sure JSDOM load everything
+});
 afterEach(() => {
+  jest.resetModules(); // make sure jest cached is clean after test
   if (!nock.isDone()) {
     console.log(nock.activeMocks());
     nock.cleanAll();
@@ -19,17 +35,11 @@ afterEach(() => {
 });
 
 afterAll(() => {
-  jest.resetAllMocks();
-});
-
-beforeEach(() => {
-  window.document.body.innerHTML = renderHtml;
-  jest.resetModules; // avoid running cached index.js
-  require("./index");
+  window.location = location;
 });
 
 test("can fetch random recipe on load and display it without error", async () => {
-  nock(`https://api.spoonacular.com`)
+  nock(`${basePath}`)
     .defaultReplyHeaders({
       "access-control-allow-origin": "*",
       "access-control-allow-credentials": "true",
@@ -63,8 +73,7 @@ test("can fetch random recipe on load and display it without error", async () =>
 });
 
 test("can display error when fetching on document load", async () => {
-  window.dispatchEvent(new Event("load"));
-  nock(`https://api.spoonacular.com`)
+  nock(`${basePath}`)
     .defaultReplyHeaders({
       "access-control-allow-origin": "*",
       "access-control-allow-credentials": "true",
@@ -80,4 +89,61 @@ test("can display error when fetching on document load", async () => {
       "Request failed with status code 401"
     );
   });
+});
+
+test("can generate joke on button click", async () => {
+  //mocking random recipe
+  nock(`${basePath}`)
+    .defaultReplyHeaders({
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true",
+    })
+    .get(`/recipes/random`)
+    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
+    .reply(200, {
+      recipes: [
+        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
+      ],
+    });
+  //mocking joke request
+  nock(`${basePath}`)
+    .defaultReplyHeaders({
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true",
+    })
+    .get(`/food/jokes/random`)
+    .query({ apiKey: /^[A-Za-z0-9]*$/gi })
+    .reply(200, { text: "tomato is a fruit not a vegetable" });
+  const inititalJoke = "Any salad can be a ceasar salad if you stab it enough";
+  expect(screen.getByText(inititalJoke)).toBeInTheDocument();
+  const jokeButton = screen.getByRole("button", { name: /more jokes/i });
+  expect(jokeButton).toBeInTheDocument();
+  fireEvent.click(jokeButton);
+  expect(
+    await screen.findByText("tomato is a fruit not a vegetable")
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText("Any salad can be a ceasar salad if you stab it enough")
+  );
+});
+
+test("redirect when a nav link is clicked", async () => {
+  nock(`${basePath}`)
+    .defaultReplyHeaders({
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true",
+    })
+    .get(`/recipes/random`)
+    .query({ number: 20, apiKey: /[A-Za-z0-9]*$/gi })
+    .reply(200, {
+      recipes: [
+        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
+      ],
+    });
+  expect(
+    await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
+  ).toBeInTheDocument();
+  const europeanLink = screen.getByText(/european/i);
+  expect(europeanLink).toBeInTheDocument();
+  fireEvent.click(europeanLink);
 });
