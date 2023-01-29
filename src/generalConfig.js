@@ -31,3 +31,9 @@ export function navLinksRedirect(element) {
     window.location.replace(`/searchResult.html?id=${element.id}`);
   });
 }
+
+export function getId(e) {
+  e.preventDefault();
+  let id = e.target.parentElement.getAttribute("id");
+  return id;
+}
