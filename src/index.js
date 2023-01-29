@@ -4,6 +4,7 @@ import {
   fetchData,
   generateKey,
   navLinksRedirect,
+  getId,
 } from "./generalConfig";
 
 // domObject
@@ -34,14 +35,14 @@ window.onload = async () => {
 
 function displayRandomRecipe(recipeArr) {
   for (let i = 0; i < recipeArr.length; i++) {
-    let imageSrc =
-      `https://spoonacular.com/recipeImages/${recipeArr[i].id}-556x370.jpg` ||
-      "https://spoonacular.com/images/spoonacular-logo-b.svg";
+    let index = i;
+    let title = recipeArr[index].title;
+    let imageSrc = `https://spoonacular.com/recipeImages/${recipeArr[index].id}-556x370.jpg`;
     domElement.randomRecipeContainer.insertAdjacentHTML(
       "beforeEnd",
-      ` <div class="single__recipe selected"  id= ${recipeArr[i].id}>
+      ` <div class="single__recipe selected"  id= ${recipeArr[index].id}>
             <span>${recipeArr[i].title}</span>
-            <img src= ${imageSrc} loading='lazy' alt= ${recipeArr[i].title}/>
+            <img src= ${imageSrc} loading='lazy' alt=${title}/>
           </div>`
     );
   }
@@ -71,32 +72,20 @@ domElement.searchForm.addEventListener("submit", (e) => {
 domElement.generateJoke.addEventListener("click", async (e) => {
   e.preventDefault();
   let key = generateKey();
-  const jokeResponse = await fetchData(
-    "https://api.spoonacular.com/food/jokes/random?&",
-    key
-  );
-  if (jokeResponse.error) {
-    alert(jokeResponse.error);
-  } else {
+  try {
+    const jokeResponse = await fetchData(
+      "https://api.spoonacular.com/food/jokes/random?&",
+      key
+    );
     document.querySelector("q").textContent = jokeResponse.data.text;
+  } catch (error) {
+    alert(error.message);
   }
 });
 
-// get recipeID
-
-export function getId(e) {
-  e.preventDefault();
-  if (e.target.parentElement.tagName.toLowerCase() !== "div") {
-    return;
-  }
-
-  let id = e.target.parentElement.id;
-  return id;
-}
-
 domElement.randomRecipeContainer.addEventListener("click", (e) => {
   const id = getId(e);
-  if (id !== null || id !== undefined) {
+  if (id) {
     window.location.replace(`./singleRecipe.html?id=${id}`);
   }
   return;
