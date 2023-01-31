@@ -8,6 +8,21 @@ const renderHtml = fs.readFileSync("./src/index.html", "utf-8");
 const alertSpy = jest.spyOn(global, "alert").mockImplementation();
 const basePath = "https://api.spoonacular.com";
 
+const successFullRandomRequestMock = () => {
+  nock(`${basePath}`)
+    .defaultReplyHeaders({
+      "access-control-allow-origin": "*",
+      "access-control-allow-credentials": "true",
+    })
+    .get(`/recipes/random`)
+    .query({ number: 20, apiKey: /[A-Za-z0-9]*$/gi })
+    .reply(200, {
+      recipes: [
+        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
+      ],
+    });
+};
+
 //mocking window.location
 Object.defineProperty(window, "location", {
   writable: true,
@@ -44,19 +59,7 @@ afterAll(() => {
 });
 
 test("can fetch random recipe on load and display it without error", async () => {
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
-      ],
-    });
-
+  successFullRandomRequestMock();
   // loader is displayed
   const loader = document.querySelector(".loading");
   expect(loader).toBeInTheDocument();
@@ -98,18 +101,7 @@ test("can display error when fetching on document load", async () => {
 
 test("can generate joke on button click and update dom", async () => {
   //mocking random recipe
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
-      ],
-    });
+  successFullRandomRequestMock();
   //mocking joke request
   nock(`${basePath}`)
     .defaultReplyHeaders({
@@ -133,21 +125,7 @@ test("can generate joke on button click and update dom", async () => {
 });
 
 test("can display error when generating joke", async () => {
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        {
-          title: "Chocoholic's Deep Dark Dream Chiffon Cake",
-          id: "638797",
-        },
-      ],
-    });
+  successFullRandomRequestMock();
   //mocking joke request
   nock(`${basePath}`)
     .defaultReplyHeaders({
@@ -168,18 +146,7 @@ test("can display error when generating joke", async () => {
 });
 
 test("redirect when a nav link is clicked", async () => {
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
-      ],
-    });
+  successFullRandomRequestMock();
   expect(
     await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
   ).toBeInTheDocument();
@@ -193,18 +160,7 @@ test("redirect when a nav link is clicked", async () => {
 });
 
 test("can handle searchForm", async () => {
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        { title: "Chocoholic's Deep Dark Dream Chiffon Cake", id: "638797" },
-      ],
-    });
+  successFullRandomRequestMock();
   expect(
     await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
   ).toBeInTheDocument();
@@ -222,21 +178,7 @@ test("can handle searchForm", async () => {
 
 test("can navigate to article one on click", async () => {
   //mock random recipe fetch on load
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        {
-          title: "Chocoholic's Deep Dark Dream Chiffon Cake",
-          id: "638797",
-        },
-      ],
-    });
+  successFullRandomRequestMock();
   expect(
     await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
   ).toBeInTheDocument();
@@ -250,21 +192,7 @@ test("can navigate to article one on click", async () => {
 
 test("can navigate to article two on container click", async () => {
   //mock random recipe fetch on load
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        {
-          title: "Chocoholic's Deep Dark Dream Chiffon Cake",
-          id: "638797",
-        },
-      ],
-    });
+  successFullRandomRequestMock();
   expect(
     await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
   ).toBeInTheDocument();
@@ -278,21 +206,7 @@ test("can navigate to article two on container click", async () => {
 
 test("do nothing when parent Element has no id and element is clicked", async () => {
   //mock random recipe fetch on load
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        {
-          title: "Chocoholic's Deep Dark Dream Chiffon Cake",
-          id: "638797",
-        },
-      ],
-    });
+  successFullRandomRequestMock();
   expect(
     await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
   ).toBeInTheDocument();
@@ -305,21 +219,7 @@ test("do nothing when parent Element has no id and element is clicked", async ()
 
 test("redirect to single product when fetched recipe has id and is clicked", async () => {
   //mock random recipe fetch on load
-  nock(`${basePath}`)
-    .defaultReplyHeaders({
-      "access-control-allow-origin": "*",
-      "access-control-allow-credentials": "true",
-    })
-    .get(`/recipes/random`)
-    .query({ number: 20, apiKey: /^[A-Za-z0-9]*$/gi })
-    .reply(200, {
-      recipes: [
-        {
-          title: "Chocoholic's Deep Dark Dream Chiffon Cake",
-          id: "638797",
-        },
-      ],
-    });
+  successFullRandomRequestMock();
   expect(
     await screen.findByText("Chocoholic's Deep Dark Dream Chiffon Cake")
   ).toBeInTheDocument();
