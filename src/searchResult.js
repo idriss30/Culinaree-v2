@@ -38,8 +38,7 @@ function displayResult(recipeArray) {
   //making sure container is empty before filling it up
   searchResultDom.resultContainer.innerHTML = "";
   recipeArray.forEach((recipe) => {
-    let imageSrc =
-      recipe.image || "https://spoonacular.com/images/spoonacular-logo-b.svg";
+    let imageSrc = recipe.image;
     searchResultDom.resultContainer.insertAdjacentHTML(
       "beforeend",
       `
@@ -100,7 +99,6 @@ const checkArraySize = (arrayToCheck) => {
 
 searchResultDom.pages.addEventListener("click", (e) => {
   let switchCheck = parseInt(e.target.textContent);
-  if (!switchCheck) return;
   scrollTotop();
   let arraySize;
   switch (switchCheck) {
@@ -126,12 +124,13 @@ searchResultDom.pages.addEventListener("click", (e) => {
         ? displayResult([...recipesArray.slice(75)])
         : displayResult([...recipesArray.slice(0, 25)]);
       break;
+    default:
+      break;
   }
 });
 
 searchResultDom.button.addEventListener("click", () => window.history.back());
 searchResultDom.resultContainer.addEventListener("click", (e) => {
-  if (e.target === null) return;
   let id = e.target.parentElement.id;
-  window.location.replace(`/singleRecipe.html?id=${id}`);
+  if (id) return window.location.replace(`/singleRecipe.html?id=${id}`);
 });
