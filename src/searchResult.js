@@ -90,24 +90,41 @@ window.onload = async () => {
 let navLinksArr = Array.from(searchResultDom.navLinks);
 navLinksArr.forEach((element) => navLinksRedirect(element));
 
+const checkArraySize = (arrayToCheck) => {
+  if (!arrayToCheck.length > 0) {
+    alert("no more recipes to display, loading page one");
+    return false;
+  }
+  return true;
+};
+
 searchResultDom.pages.addEventListener("click", (e) => {
+  let switchCheck = parseInt(e.target.textContent);
+  if (!switchCheck) return;
   scrollTotop();
-  switch (parseInt(e.target.textContent)) {
+  let arraySize;
+  switch (switchCheck) {
     case 1:
       displayResult([...recipesArray.slice(0, 25)]);
       break;
     case 2:
-      console.log(true);
-      displayResult([...recipesArray.slice(25, 50)]);
+      arraySize = checkArraySize([...recipesArray.slice(25, 50)]);
+      arraySize === true
+        ? displayResult([...recipesArray.slice(25, 50)])
+        : displayResult([...recipesArray.slice(0, 25)]);
       break;
     case 3:
-      displayResult([...recipesArray.slice(50, 75)]);
+      arraySize = checkArraySize([...recipesArray.slice(50, 75)]);
+      arraySize === true
+        ? displayResult([...recipesArray.slice(50, 75)])
+        : displayResult([...recipesArray.slice(0, 25)]);
+
       break;
     case 4:
-      displayResult([...recipesArray.slice(75)]);
-      break;
-
-    default:
+      arraySize = checkArraySize([...recipesArray.slice(75)]);
+      arraySize === true
+        ? displayResult([...recipesArray.slice(75)])
+        : displayResult([...recipesArray.slice(0, 25)]);
       break;
   }
 });
