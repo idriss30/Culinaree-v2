@@ -17,7 +17,6 @@ export async function fetchData(url, endpoint) {
 export function generateKey() {
   //key
   let keys = [
-    // keys are stored here for demontration purpose only
     `${process.env.keyOne}`,
     `${process.env.keyTwo}`,
     `${process.env.keyThree}`,
