@@ -29,8 +29,13 @@ window.onload = async () => {
   if (Object.keys(recipeInfo).length > 0) {
     return displayRecipe(recipeInfo);
   }
-  const { data } = await fetchSingleRecipe(getIdParams());
-  displayRecipe(data);
+  try {
+    const { data } = await fetchSingleRecipe();
+    displayRecipe(data);
+  } catch (error) {
+    alert(error.message);
+    window.location.replace("/");
+  }
 };
 
 function getIdParams() {
@@ -57,9 +62,7 @@ function displayRecipe(data) {
   displayTileAndImg(data.title, data.image, data.summary);
   displayIngredients(data.extendedIngredients);
   displayInstructions(data.analyzedInstructions[0].steps);
-  displayWinePairing(data.winePairing);
-
-  return;
+  if (data.winePairing.pairingText) displayWinePairing(data.winePairing);
 }
 
 function displayIngredients(ingredients) {
@@ -78,15 +81,13 @@ function displayIngredients(ingredients) {
 }
 
 function displayWinePairing(wines) {
-  if (wines.pairingText.length !== 0) {
-    singleRecipeDom.winePairing.insertAdjacentHTML(
-      "beforeend",
-      `
+  singleRecipeDom.winePairing.insertAdjacentHTML(
+    "beforeend",
+    `
           <h4>Wine pairing</h4>
           <p>${wines.pairingText}<p/>
         `
-    );
-  }
+  );
 }
 
 function displayInstructions(instructions) {
@@ -103,20 +104,16 @@ function displayInstructions(instructions) {
 async function fetchSingleRecipe() {
   let key = generateKey();
   let id = getIdParams();
-  try {
-    const response = await fetchData(
-      `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&`,
-      key
-    );
-    if (response.data.length === 0) {
-      throw Error("recipe data not found");
-    }
-    saveRecipeToSessionStorage(getIdParams(), response.data);
-    return response;
-  } catch (error) {
-    alert(error.message);
-    window.location.replace("/");
+
+  const response = await fetchData(
+    `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&`,
+    key
+  );
+  if (Object.keys(response.data).length === 0) {
+    throw Error("recipe data not found");
   }
+  saveRecipeToSessionStorage(response.data.id, response.data);
+  return response;
 }
 
 function saveRecipeToSessionStorage(key, element) {
