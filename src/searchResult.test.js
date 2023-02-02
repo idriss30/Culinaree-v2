@@ -88,9 +88,6 @@ describe("assert on cases that need location or alert mock ", () => {
     window.location = Object.assign(
       new URL("http://localhost:3000/searchResult.html?id=burger"),
       {
-        ancestorOrigins: "",
-        assign: jest.fn(),
-        reload: jest.fn(),
         replace: jest.fn(),
       }
     );
