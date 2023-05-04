@@ -6,8 +6,8 @@
   style="display: inline-block; margin: 1rem auto; max-width: 600px; max-height:800px"/>
 
 Culinaree is a recipe website that allows the user to find different recipes based on search input.
-It is connected to the spoonacular API.
-Follow this link to see it live.
+It is connected to the spoonacular API.</br>
+Follow this <a href ="https://idrisscissoko.com/culinaree/">link</a> to see it live.</br>
 Please keep in mind that Spoonacular restricts the number of requests for free users.
 Do not submit too many requests to allow other users to see how it performs.
 
